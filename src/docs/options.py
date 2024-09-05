@@ -28,6 +28,10 @@ Read the 'DS' field in the VCF files and output the dosage scores. This is the d
 behaviour.
 """
 
+drop_reference = """
+Drop (delete) reference table for TEXT from database
+"""
+
 geno = """
 Name of the Geno file.
 """
@@ -63,6 +67,10 @@ Create index of bgzipped output file? Ignored unless output is bgzipped. [defaul
 
 output = """
 Output file name. Output will be bgzipped if, and only if, file name ends with '.gz'.
+"""
+
+preview_reference = """
+Preview 10 lines of data from table TEXT.
 """
 
 probability = """

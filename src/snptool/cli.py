@@ -56,7 +56,7 @@ def cli(ctx, dbsnp_build, log, database_path):
 #@cli.result_callback()
 #def cli_callback(dbsnp, dbsnp_build_id, log, snptool_db_path):
 #    dbsnp.close()
-#    logging.debug(f"cli_callback: Closed database.")
+#    logging.info(f"cli_callback: Closed database.")
 
 # CLI: Add Bimbam command
 cli.add_command(bimbam)

@@ -13,3 +13,5 @@ __version__ = """0.7.0"""
 # TODO: BIMBAM Add support for UKB's wonderful partial dosage scores?
 # TODO: (But not here...) Add support for phenotype file in phenotool.
 # TODO: You could reduce the db size by using: https://github.com/phiresky/sqlite-zstd
+# TODO: Could add function to extract samples as well as snps
+# TODO: Could make a --pgs option which produces a VCF suitable for calculating the given PGS. Riskscore integration ;-)
