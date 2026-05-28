@@ -21,6 +21,9 @@ htmlcov/
 .mypy_cache/
 .ruff_cache/
 
+# Local test data
+test-data/
+
 # Logs/editor temp files
 logs/
 *.log

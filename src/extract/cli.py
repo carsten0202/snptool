@@ -46,8 +46,14 @@ def extract(snpdb, files, build, header, index, output, rsids, regions, duplicat
     THIS COMMAND IS STILL EXPERIMENTAL; USE WITH CAUTION
     """
     from pkstreamers import SubprocessReader, SNPstreamer
-    logger.debug(list(snpdb.rsid2coords(rsids, build)))
-    id_coords = list(map(lambda x: "\t".join(str(v) for v in x), list(snpdb.rsid2coords(rsids, build)) + regions))
+    rsid_coords = []
+    if rsids:
+        if snpdb is None:
+            logger.error(" RSID extraction requires a configured SNPTOOL database.")
+            sys.exit("Terminating due to errors...")
+        rsid_coords = list(snpdb.rsid2coords(rsids, build))
+        logger.debug(rsid_coords)
+    id_coords = list(map(lambda x: "\t".join(str(v) for v in x), rsid_coords + regions))
     if not id_coords:
         logger.error(f" No (usuable) SNP ids or coordinates found. Either you forgot to give any, or they failed parsing.")
         sys.exit("Terminating due to errors...")
@@ -121,5 +127,4 @@ def main():
     except KeyError:
         obj = None
     extract(auto_envvar_prefix='SNPTOOL', obj=obj)
-
 
