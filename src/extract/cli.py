@@ -35,8 +35,9 @@ logger = logging.getLogger(__name__)
 @click.option('-i', '--rsids', type=pklib.SampleList(mode='rb'), default=[], help=OPTIONS.rsids)
 @click.option('-o', '--output', type=pklib.VCFFile(mode='wb'), default=sys.stdout.buffer, show_default='<stdout>', help=OPTIONS.output)
 @click.option('-r', '--regions', type=pklib.BED3(), default=[], help=OPTIONS.regions)
+@click.option('--duplicates', type=click.Choice(['all', 'keep-first', 'keep-last'], case_sensitive=False), default='all', show_default=True, help=OPTIONS.duplicates)
 @click.pass_obj
-def extract(snpdb, files, build, header, index, output, rsids, regions):
+def extract(snpdb, files, build, header, index, output, rsids, regions, duplicates):
     """
     Extract one or more entries from one or more BCF/VCF files.
 
@@ -57,10 +58,48 @@ def extract(snpdb, files, build, header, index, output, rsids, regions):
             for line in list(header):
                 output.write(f"{line}\n".encode('utf-8'))
 
-    for fobj in files:
-        with SNPstreamer(fobj, command="view", header=False, regions=id_coords) as snps:
-            for snp in snps:
-                output.write(f"{snp}\n".encode('utf-8'))
+    def variant_key(line):
+        fields = line.split("\t")
+        if len(fields) < 5:
+            return None
+        return (fields[0], fields[1], fields[3], fields[4])
+
+    duplicates = duplicates.casefold()
+    if duplicates == 'all':
+        for fobj in files:
+            with SNPstreamer(fobj, command="view", header=False, regions=id_coords) as snps:
+                for snp in snps:
+                    output.write(f"{snp}\n".encode('utf-8'))
+    elif duplicates == 'keep-first':
+        seen = set()
+        for fobj in files:
+            with SNPstreamer(fobj, command="view", header=False, regions=id_coords) as snps:
+                for snp in snps:
+                    key = variant_key(snp)
+                    if key is None:
+                        output.write(f"{snp}\n".encode('utf-8'))
+                    elif key not in seen:
+                        seen.add(key)
+                        output.write(f"{snp}\n".encode('utf-8'))
+                    else:
+                        logger.debug(f" Skipping duplicate variant: {key}")
+    elif duplicates == 'keep-last':
+        records = {}
+        unkeyed = []
+        for fobj in files:
+            with SNPstreamer(fobj, command="view", header=False, regions=id_coords) as snps:
+                for snp in snps:
+                    key = variant_key(snp)
+                    if key is None:
+                        unkeyed.append(snp)
+                    else:
+                        if key in records:
+                            logger.debug(f" Replacing duplicate variant: {key}")
+                        records[key] = snp
+        for snp in unkeyed:
+            output.write(f"{snp}\n".encode('utf-8'))
+        for snp in records.values():
+            output.write(f"{snp}\n".encode('utf-8'))
 
     output.close() # I wonder if this might close stdout when output is stdout.buffer?
     if index and isinstance(output.name, bytes) and output.name.endswith(b'.gz'):
@@ -82,6 +121,5 @@ def main():
     except KeyError:
         obj = None
     extract(auto_envvar_prefix='SNPTOOL', obj=obj)
-
 
 

@@ -16,6 +16,10 @@ extract = """
 NOTE: While multi-file input is supported, it may not always result in a syntactically valid header. If this is a
 problem, use only one input file (you can call 'bcftools concat' or 'bcftools merge' yourself to make one).
 
+By default, multi-file extraction emits all matching records from all input files. If the same variant appears in
+multiple files, use '--duplicates keep-first' or '--duplicates keep-last' to keep only one record. Duplicate variants
+are identified by CHROM, POS, REF, and ALT. This does not resolve incompatible VCF headers.
+
 KNOWN 'BUG':
 Extract retrives SNPs by regional coordinates meaning that overlapping features such as INDELs may get extracted as
 well. The same will happen if you use bcftools to fetch snps. Future versions will (try to) improve upon this.
@@ -33,4 +37,3 @@ snps/samples. It is recommend to use 'snptool extract' first to get the precise 
 snptool = """
 
 """
-
