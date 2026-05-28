@@ -16,3 +16,8 @@ __version__ = """0.7.0"""
 # TODO: You could reduce the db size by using: https://github.com/phiresky/sqlite-zstd
 # TODO: Could add function to extract samples as well as snps
 # TODO: Could make a --pgs option which produces a VCF suitable for calculating the given PGS. Riskscore integration ;-)
+# TODO: Use a PGS file as regions file, extracting the variants used in the riskscore?
+
+# NOTE: These two will probably need to be their own command, or at least their own invocation, as extract is a line-processor
+# TODO: Strategies to deal with duplicates, as in prep for riskscores
+# TODO: Options to sort the output

@@ -72,7 +72,6 @@ def extract(snpdb, files, build, header, index, output, rsids, regions):
 #
 ##################################################
 
-
 def main():
     from pkdbs.SnptoolDatabase import SnptoolDatabase
     try:
