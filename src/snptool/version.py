@@ -1,5 +1,5 @@
 
-__version__ = """0.7.0"""
+__version__ = """0.9.0"""
 # v0.1: Basic functionality
 # v0.2: Prepared for module integration
 # v0.3: Added the BIMBAM command and vcf2bimbam
@@ -10,6 +10,7 @@ __version__ = """0.7.0"""
 # v0.6.2: Introduced threading in handler.py. Works (but not with 'head'; meh...)
 # v0.7: Fixed the concat header problem. Also added Geno and Info file support
 # v0.8: Added several options to builddb to make database maintainence easier
+# v0.9: Added keep-first and keep-last options to extract
 
 # TODO: BIMBAM Add support for UKB's wonderful partial dosage scores?
 # TODO: (But not here...) Add support for phenotype file in phenotool.

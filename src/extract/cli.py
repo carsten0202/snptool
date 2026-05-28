@@ -12,7 +12,7 @@ import logging
 import os
 import sys
 
-from docs import *
+from docs import EPILOG as EPILOG, OPTIONS as OPTIONS
 import pklib
 
 logger = logging.getLogger(__name__)
@@ -55,7 +55,7 @@ def extract(snpdb, files, build, header, index, output, rsids, regions, duplicat
         logger.debug(rsid_coords)
     id_coords = list(map(lambda x: "\t".join(str(v) for v in x), rsid_coords + regions))
     if not id_coords:
-        logger.error(f" No (usuable) SNP ids or coordinates found. Either you forgot to give any, or they failed parsing.")
+        logger.error(" No (usuable) SNP ids or coordinates found. Either you forgot to give any, or they failed parsing.")
         sys.exit("Terminating due to errors...")
 
     if header:
