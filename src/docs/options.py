@@ -28,6 +28,12 @@ Read the 'DS' field in the VCF files and output the dosage scores. This is the d
 behaviour.
 """
 
+duplicates = """
+How to handle duplicate extracted variants across input files. Duplicates are identified by CHROM, POS, REF, and ALT.
+'all' keeps current behavior and emits every matching record. 'keep-first' emits the first matching record only.
+'keep-last' emits the last matching record only.
+"""
+
 drop_reference = """
 Drop (delete) reference table for TEXT from database
 """

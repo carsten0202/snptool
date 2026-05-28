@@ -7,11 +7,11 @@
 #
 # --%%  RUN: Perform Basic Setup  %%--
 
-import click
 import logging
 import sys
 
-from docs import *
+import click
+from docs import EPILOG, OPTIONS
 
 logger = logging.getLogger(__name__)
 
@@ -31,9 +31,9 @@ logger = logging.getLogger(__name__)
 @click.option('--dosage', 'format_flag', flag_value='DS', default=True, help=OPTIONS.dosage)
 @click.option('--geno', type=click.File("w"), default=sys.stdout, show_default='<stdout>', help=OPTIONS.geno)
 @click.option('--genotype', 'format_flag', flag_value='GT', help=OPTIONS.genotype)
-@click.option('--info', type=click.File("w"), default=None, help = OPTIONS.info)
+@click.option('--info', type=click.File("w"), default=None, help=OPTIONS.info)
 @click.option('--probability', 'format_flag', flag_value='GP', help=OPTIONS.probability)
-@click.option('--sep', default="\t", show_default='tab', help = OPTIONS.sep)
+@click.option('--sep', default="\t", show_default='tab', help=OPTIONS.sep)
 def genoinfo(files, digits, format_flag, geno, info, sep):
     """
     Create Geno and Info files from one or more BCF/VCF files.
@@ -43,6 +43,10 @@ def genoinfo(files, digits, format_flag, geno, info, sep):
     info from the VCF file which doesn't fit in the Geno file.
     """
     from genoinfo import GenoInfo
+
+    if not files:
+        raise click.UsageError("Missing argument 'FILES...'.")
+
     outdata = None
     samples = None
     for fobj in files:
@@ -73,6 +77,5 @@ def main():
     except KeyError:
         obj = None
     genoinfo(auto_envvar_prefix='SNPTOOL', obj=obj)
-
 
 
